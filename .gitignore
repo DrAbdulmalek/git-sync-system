@@ -1,0 +1,26 @@
+# Git Sync System
+# Dr. Abdulmalek - Omni Medical Suite
+
+# Secrets (tokens, API keys) — stored locally at ~/.config/git-sync-system/secrets.env
+# NEVER commit this file!
+config/settings.env
+
+# Logs
+logs/*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
