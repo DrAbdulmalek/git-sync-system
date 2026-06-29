@@ -1,0 +1,31 @@
+default_mode: read-only
+allowlist:
+  - omni-medical-suite
+  - scanner-fixer
+  - medical-handwriting-ocr
+  - medical-ocr-training-hub
+  - medical-ocr-benchmarks
+  - medical-ocr-trainer
+  - profile-readme
+denylist:
+  - ai-fuel-engine
+  - bilingual-extractor
+  - medical-doc-processor
+  - medical-ocr-postprocessor
+  - omniparse-study
+  - omniparse
+  - ponytail
+  - telegram-forwarder
+  - IntelliFile-app
+sensitive:
+  - medical-ocr-ground-truth
+branch_protection:
+  check_before_push: true
+  deny_force_push_protected: true
+audit:
+  enabled: true
+  log_file: logs/audit.log
+  max_log_size_mb: 50
+log_rotation:
+  max_files: 10
+  compress: true
