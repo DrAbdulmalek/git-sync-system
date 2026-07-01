@@ -26,60 +26,59 @@ This document defines the governance rules for the git-sync-system tool that man
 - medical-ocr-training-hub
 - medical-ocr-benchmarks
 - medical-ocr-trainer
+- medical-ocr-ground-truth
 - profile-readme (DrAbdulmalek/DrAbdulmalek)
+- reset-net
 
 ### Denylist (repos that MUST NEVER receive auto-pushes)
+- ocr-groundtruth (archived, merged into medical-ocr-ground-truth)
 - ai-fuel-engine (archived)
 - bilingual-extractor (archived)
 - medical-doc-processor (archived)
 - medical-ocr-postprocessor (archived)
 - omniparse-study (archived)
 - omniparse (archived)
+- OmniFile_Processor (archived)
 - ponytail (archived)
-- All repos with 'archived' status
+- telegram-forwarder (archived)
+- tg-forwarder (archived)
+- IntelliFile-app (archived)
 
 ### Sensitive Repos (require --force-write + explicit confirmation)
+- omni-medical-suite (core platform)
 - medical-ocr-ground-truth (contains training data)
+- medical-ocr-benchmarks (benchmark authority)
 - Any repo with 'private' visibility
 
-## Branch Protection Awareness
+## Branch Protection
 
-The system checks branch protection rules before pushing:
+### read_only_main (direct push to main is blocked)
+These repos require PR-based workflow for main branch changes:
+- omni-medical-suite
+- medical-ocr-ground-truth
+- medical-ocr-benchmarks
+
+### Force Push Policy
+Force push is **never allowed** on protected branches. The system checks branch protection rules before pushing:
 1. Query GitHub API for branch protection status
-2. If branch is protected:
-   - Require PR workflow instead of direct push
-   - Warn user and require explicit confirmation
-3. Never force-push to protected branches
+2. If branch is protected: require PR workflow instead of direct push
+3. Warn user and require explicit confirmation
+
+### Dry-Run Requirement
+The following repos require a dry-run pass before any actual sync:
+- omni-medical-suite
+- medical-ocr-ground-truth
+- medical-ocr-benchmarks
 
 ## Audit Log
 
-All sync operations are logged to `/home/z/my-project/git-sync-system/logs/audit.log`:
+All sync operations are logged to `logs/audit.log`:
 - Timestamp, operation type, repo, branch, result
 - Push attempts (success/failure)
 - Policy violations (denied writes to denylist repos)
 - Manual overrides
+- Governance check results (PASSED/DENIED/DRY_RUN_REQUIRED)
 
 ## Configuration
 
-Policies are configured in `config/governance.yaml`:
-
-```yaml
-default_mode: read-only
-allowlist:
-  - omni-medical-suite
-  - scanner-fixer
-  # ... (see above)
-denylist:
-  - ai-fuel-engine
-  - bilingual-extractor
-  # ... (see above)
-sensitive:
-  - medical-ocr-ground-truth
-branch_protection:
-  check_before_push: true
-  deny_force_push_protected: true
-audit:
-  enabled: true
-  log_file: logs/audit.log
-  max_log_size_mb: 50
-```
+Policies are configured in `config/governance.yaml` (source of truth).
